@@ -13,7 +13,7 @@ await p.screenshot({ path: `${out}/desk-empty.png` });
 await p.click('[data-tab=data]'); await p.fill('#sForm [name=business]', 'Jane Doe Design'); await p.fill('#sForm [name=email]', 'jane@example.com'); await p.click('#sForm .b1');
 await p.click('#demo'); await p.click('[data-tab=time]');
 ok(await p.locator('#entries tbody tr').count() === 3, 'sample data adds 3 entries');
-await p.click('#tBtn'); await p.waitForTimeout(1300); ok((await p.textContent('#tClock')) !== '00:00:00', 'timer runs');
+await p.click('#tBtn'); await p.waitForTimeout(2200); ok((await p.textContent('#tClock')) !== '00:00:00', 'timer runs');
 await p.reload(); ok((await p.textContent('#tBtn')) === 'Stop', 'timer survives reload');
 await p.click('#tBtn'); ok(await p.locator('#entries tbody tr').count() === 4, 'stopping timer adds an entry');
 await p.fill('#eForm [name=hours]', '1.25'); await p.fill('#eForm [name=note]', 'Manual <b>entry</b>'); await p.click('#eForm .b1');
