@@ -24,6 +24,11 @@ await p.click('#closeDoc'); await p.click('[data-pay]'); ok((await p.textContent
 await p.screenshot({ path: `${out}/desk-invoices.png`, fullPage: true });
 await p.click('[data-tab=quotes]'); await p.click('[data-q2i]'); ok((await p.textContent('.sheet')).includes('INV-0002'), 'quote converts to invoice'); await p.click('#closeDoc');
 await p.click('[data-tab=data]'); const [dl] = await Promise.all([p.waitForEvent('download'), p.click('#xEntries')]); ok(dl.suggestedFilename().endsWith('.csv'), 'CSV export downloads');
+const csv='Date,Client,Project,Project Code,Task,Notes,Hours,Hours Rounded,Billable?,Invoiced?,Billable Rate,Billable Amount\n2026-10-01,Harvest Co,Retainer,,Dev,Bugfix,2,2,Yes,No,100,200\n';
+await p.setInputFiles('#iCsv', { name: 'harvest.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
+ok((await p.textContent('#impPrev')).includes('Harvest export'), 'Harvest CSV preview shown'); await p.screenshot({ path: `${out}/desk-import.png`, fullPage: true });
+await p.click('#impGo'); ok((await p.textContent('#impPrev')).includes('Imported 1 entries'), 'import applied');
+await p.click('[data-tab=time]'); ok((await p.textContent('#entries')).includes('Harvest Co'), 'imported entry listed');
 const m = await b.newPage({ viewport: { width: 390, height: 844 } }); await m.goto(base, { waitUntil: 'load' }); await m.screenshot({ path: `${out}/desk-mobile.png`, fullPage: false });
 ok(errs.length === 0, 'no page errors ' + errs.join('|')); ok(net.length === 0, 'no third-party network requests ' + net.join(','));
 await b.close();
